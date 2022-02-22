@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import SideMenuListItem from './SideMenuListItem';
-
+import '../style/css/side-menu.css'
+import { useDispatch } from 'react-redux'
+import * as ACTIONS from '../redux/actions'
 interface dataInterface{
     id: number,
     name: string,
@@ -8,10 +10,11 @@ interface dataInterface{
 }
 
 export default function SideMenu() {
+    const dispatch = useDispatch();
     const [data, setData] = useState<dataInterface[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost:4123/files')
+        fetch('http://localhost:4123/notes')
         .then(res => res.json())
         .then(thisData => setData(thisData))
     }, []);
@@ -23,6 +26,7 @@ export default function SideMenu() {
                     <SideMenuListItem key={element.id} name={element.name} />
                 )
             }
+            <button className='side-menu_add-note-button' onClick={() => dispatch(ACTIONS.switchisCreatingNote())} > New note</button>
         </div>
     )
 }
