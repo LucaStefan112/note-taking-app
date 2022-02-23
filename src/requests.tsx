@@ -10,6 +10,11 @@ export const NEW_NOTE = {
     address: SERVER_ADDRESS + '/new-note'
 }
 
+export const UPDATE_NOTE = {
+    method: 'PUT',
+    address: SERVER_ADDRESS + '/update-note'
+}
+
 export const REMOVE_NOTE = {
     method: 'DELETE',
     address: SERVER_ADDRESS + '/remove-note'
