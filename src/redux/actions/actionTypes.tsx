@@ -1,2 +1,3 @@
-export const switchisCreatingNote_actionType = 'SWITCH'
-export const setCurrentFile_actionType = 'SET FILE'
+export const switchisCreatingNote_actionType = 'SWITCH CREATING NOTE';
+export const setNotesList_actionType = 'SET NOTES LIST';
+export const setCurrentNote_actionType = 'SET CURRENT NOTE';

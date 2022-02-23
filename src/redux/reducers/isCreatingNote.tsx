@@ -1,6 +1,8 @@
+import { switchisCreatingNote_actionType } from "../actions/actionTypes";
+
 const isCreatingNote_reducer = (state = false, action : {type: string}) => {
     switch(action.type){
-        case 'SWITCH':    return !state;
+        case switchisCreatingNote_actionType:    return !state;
         default: return state;
     }
 }

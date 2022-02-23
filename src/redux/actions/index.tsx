@@ -1,4 +1,5 @@
 import * as ACTION_TYPES from './actionTypes'
+import { noteInterface } from '../../utils'
 
 export const switchisCreatingNote = () => (
     {
@@ -6,14 +7,16 @@ export const switchisCreatingNote = () => (
     }
 )
 
-export const setCurrentFile = (
-    payload: {
-        id: number,
-        name: string,
-        content: string
-    }) => (
+export const setNotesList = (payload: noteInterface[]) => (
     {
-        type: ACTION_TYPES.switchisCreatingNote_actionType,
+        type: ACTION_TYPES.setNotesList_actionType,
+        payload
+    }
+)
+
+export const setCurrentNote = (payload: noteInterface) => (
+    {
+        type: ACTION_TYPES.setCurrentNote_actionType,
         payload
     }
 )

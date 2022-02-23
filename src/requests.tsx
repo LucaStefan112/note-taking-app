@@ -11,7 +11,7 @@ export const NEW_NOTE = {
 }
 
 export const UPDATE_NOTE = {
-    method: 'PUT',
+    method: 'POST',
     address: SERVER_ADDRESS + '/update-note'
 }
 

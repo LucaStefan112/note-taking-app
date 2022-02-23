@@ -2,7 +2,7 @@ import React from 'react'
 import '../style/css/new-note-box.css'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { switchisCreatingNote } from '../redux/actions'
+import { switchisCreatingNote, setNotesList } from '../redux/actions'
 import { createJSONRequestObject, hasAlphanum } from '../utils'
 import * as REQUESTS from '../requests'
 
@@ -11,12 +11,17 @@ export default function NewNoteSection() {
     const [newNoteName, setNewNoteName] = useState("");
     const [isNoteNameStringValid, setIsNoteNameStringValid] = useState(true);
 
+    // Exiting new note section: 
     const cancelNewNote = () => dispatch(switchisCreatingNote());
+    
+    // Creating a new note:
     const createNewNote = async () => {
 
+        // Checking validity for current name:
         const nameValidity = 0 < newNoteName.length && newNoteName.length < 31 && hasAlphanum(newNoteName);
         
         if(!nameValidity){
+            // Displaying error message: 
             setIsNoteNameStringValid(false)
             return;
         }
@@ -24,12 +29,17 @@ export default function NewNoteSection() {
         setIsNoteNameStringValid(true);
 
         try{
+            // Fetching data to server:
             const response = await fetch(REQUESTS.NEW_NOTE.address, createJSONRequestObject(REQUESTS.NEW_NOTE.method, {name: newNoteName}));
             const data = await response.json();
+
+            // Updating notes list:
+            dispatch(setNotesList(data))
         } catch (err) {
             console.log(err);
         }
 
+        // Exiting new note section:
         cancelNewNote();
     }
 
