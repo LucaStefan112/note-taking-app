@@ -20,6 +20,8 @@ export default function NewNoteSection() {
 
         // Checking validity for current name:
         let nameValidity = 0 < newNoteName.length && newNoteName.length < 31 && hasAlphanum(newNoteName);
+
+        // Check if name already exists:
         for(let i = 0; i < notesList.length && nameValidity; i++)
             nameValidity = newNoteName !== notesList[i].name;
 

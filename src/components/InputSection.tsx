@@ -27,28 +27,32 @@ export function InputSection() {
         // Saving the current note:
         if(e.key === 's' && e.ctrlKey ){
             e.preventDefault();
-            console.log("Saving: ", {...currentNote, content: textContent});
 
             // Fetching data to server:
-            if(currentNote.id > 0)
+            if(currentNote.id > 0){
+                
+                console.log("Saving: ", {...currentNote, content: textContent});
                 fetch(UPDATE_NOTE.address, createJSONRequestObject(UPDATE_NOTE.method, {...currentNote, content: textContent}))
                     .catch(err => console.log(err));
+            }
         }
 
         // Deleting current note:
         if(e.key === 'Delete'){
-            console.log("Deleting: ", currentNote);
 
             // Fetching data to server:
-            if(currentNote.id > 0)
+            if(currentNote.id > 0){
+
+                console.log("Deleting: ", currentNote);
                 fetch(REMOVE_NOTE.address, createJSONRequestObject(REMOVE_NOTE.method, {id: currentNote.id}))
                     .then(response => response.json())
                         // Recreating note list:
                         .then(data => {
                             dispatch(setNotesList(data)); 
-                            dispatch(setCurrentNote(defaultNote))
+                            dispatch(setCurrentNote({...defaultNote}))
                         })
                             .catch(err => console.log(err));
+            }
         }
     }
 
@@ -56,7 +60,7 @@ export function InputSection() {
         document.addEventListener('keydown', handleKeyDown);
 
         return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [notesList])
+    })
 
     return (
         <div className='main-input' >
