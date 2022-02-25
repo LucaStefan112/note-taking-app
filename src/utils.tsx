@@ -1,5 +1,11 @@
 // JSON request builder:
-export const createJSONRequestObject = (method: string, payload?: object) => ({method: "POST",headers:{'Content-Type': 'application/json'},body: JSON.stringify(payload)})
+export const createJSONRequestObject = (method: string, payload?: object) => ({method: method,headers:{'Content-Type': 'application/json'},body: JSON.stringify(payload)})
+
+export const defaultNote = {
+    id: -1,
+    name: "",
+    content: ""
+}
 
 // Function that verifies if string has at least one alfanumeric character:
 export const hasAlphanum = (str: string) => {

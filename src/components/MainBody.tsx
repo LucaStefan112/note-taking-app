@@ -1,8 +1,8 @@
-import React from 'react'
 import SideMenu from './SideMenu'
-import InputSection from './InputSection'
+import {InputSection} from './InputSection'
 
 export default function MainBody() {
+    
     return (
     <div className='body-main'>
         <SideMenu />

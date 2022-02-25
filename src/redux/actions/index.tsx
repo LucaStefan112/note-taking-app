@@ -20,3 +20,10 @@ export const setCurrentNote = (payload: noteInterface) => (
         payload
     }
 )
+
+export const updateCurrentNote = (payload: noteInterface) => (
+    {
+        type: ACTION_TYPES.updateCurrentNote_actionType,
+        payload
+    }
+)

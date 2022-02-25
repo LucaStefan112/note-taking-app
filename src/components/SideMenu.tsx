@@ -1,50 +1,34 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import SideMenuListItem from './SideMenuListItem';
-import '../style/css/side-menu.css'
 import { useSelector, useDispatch } from 'react-redux'
-import { setCurrentNote, setNotesList, switchisCreatingNote } from '../redux/actions'
-import * as REQUESTS from '../requests'
-import { noteInterface,createJSONRequestObject } from '../utils';
-import { idText } from 'typescript';
+import { setNotesList, switchisCreatingNote } from '../redux/actions'
+import { NOTES } from '../requests';
+import { noteInterface } from '../utils';
+import '../style/css/side-menu.css'
 
 export default function SideMenu() {
     const dispatch = useDispatch();
     const notesList = useSelector((state: any) => state.notesList);
-    const currentNote = useSelector((state: any) => state.currentNote);
-    let isSavingNote = false;
 
+    // Getting all notes from db:
     const loadNotesList = async () => {
-        // Fetching data to server:
-        try{
-            const response = await fetch(REQUESTS.NOTES.address);
-            const data = await response.json();
-            dispatch(setNotesList(data));
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    // Handle key presses:
-    const handleKeyPress = () => {
-        "NONO"
+        // Fetching data from server:
+        fetch(NOTES.address)
+            .then(response => response.json())
+                .then(data => dispatch(setNotesList(data)))
+                    .catch(err => console.log(err));
     }
 
     useEffect(() => {
         loadNotesList();
-        window.addEventListener('keydown', handleKeyPress);
-
-        return () => 
-            window.removeEventListener('keydown', handleKeyPress);
-    }, []);
+    }, [])
 
     return (
         <div className='side-menu'>
-            {
-                notesList.map((note: noteInterface) => 
-                    <SideMenuListItem key={note.id} note={note} />
-                )
+            {   // Render notes list:
+                notesList.map((note: noteInterface) => <SideMenuListItem key={note.id} thisNote={note} />)
             }
-            <button className='side-menu_add-note-button' onClick={() => dispatch(switchisCreatingNote())} > New note</button>
+            <button className='side-menu_add-note-button' onClick={() => dispatch(switchisCreatingNote())} >New note</button>
         </div>
     )
 }

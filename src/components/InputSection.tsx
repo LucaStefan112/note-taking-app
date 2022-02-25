@@ -1,14 +1,68 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { createJSONRequestObject, defaultNote } from '../utils'
+import { setCurrentNote, setNotesList } from '../redux/actions'
+import { UPDATE_NOTE, REMOVE_NOTE } from '../requests'
 import '../style/css/input-section.css'
-import { useSelector } from 'react-redux'
-import { noteInterface } from '../utils'
 
-export default function InputSection() {
-    const currentNote = useSelector((state: any) => state.currentNote)
+// Text area input:
+export let textContent = '';
+
+export function InputSection() {
+    const dispatch = useDispatch();
+    const currentNote = useSelector((state: any) => state.currentNote);
+    const notesList = useSelector((state: any) => state.notesList);
+
+    // By default, text area input is equal to current note saved content:
+    textContent = currentNote.content;
+
+    // Changing text area content:
+    const handleInputChange = (e: any) => {
+        textContent = e.target.value;
+    }
+
+    // Handle keys:
+    const handleKeyDown = (e: any ) => {
+
+        // Saving the current note:
+        if(e.key === 's' && e.ctrlKey ){
+            e.preventDefault();
+            console.log("Saving: ", {...currentNote, content: textContent});
+
+            // Fetching data to server:
+            if(currentNote.id > 0)
+                fetch(UPDATE_NOTE.address, createJSONRequestObject(UPDATE_NOTE.method, {...currentNote, content: textContent}))
+                    .catch(err => console.log(err));
+        }
+
+        // Deleting current note:
+        if(e.key === 'Delete'){
+            console.log("Deleting: ", currentNote);
+
+            // Fetching data to server:
+            if(currentNote.id > 0)
+                fetch(REMOVE_NOTE.address, createJSONRequestObject(REMOVE_NOTE.method, {id: currentNote.id}))
+                    .then(response => response.json())
+                        // Recreating note list:
+                        .then(data => {
+                            dispatch(setNotesList(data)); 
+                            dispatch(setCurrentNote(defaultNote))
+                        })
+                            .catch(err => console.log(err));
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [notesList])
 
     return (
         <div className='main-input' >
-            { currentNote && <textarea className='main-input__box' defaultValue={currentNote.content} name="text-input" onChange={(e) => console.log(e.target.value)}/>}
+            {   currentNote.id > 0 && 
+                <textarea key={Math.random()} autoFocus className='main-input__box' 
+                defaultValue={textContent} name="text-input" onChange={handleInputChange}/>}
         </div>
     )
 }
