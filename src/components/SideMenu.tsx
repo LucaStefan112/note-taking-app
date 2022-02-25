@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import SideMenuListItem from './SideMenuListItem';
 import { useSelector, useDispatch } from 'react-redux'
-import { setNotesList, switchisCreatingNote } from '../redux/actions'
+import { setCurrentNote, setNotesList, switchisCreatingNote } from '../redux/actions'
 import { NOTES } from '../requests';
 import { noteInterface } from '../utils';
 import '../style/css/side-menu.css'
@@ -15,7 +15,13 @@ export default function SideMenu() {
         // Fetching data from server:
         fetch(NOTES.address)
             .then(response => response.json())
-                .then(data => dispatch(setNotesList(data)))
+                .then(data => {
+                    // Update notes list:
+                    dispatch(setNotesList(data));
+
+                    // Make current note last note:
+                    if(data.length > 0) dispatch(setCurrentNote(data[data.length - 1]));
+                })
                     .catch(err => console.log(err));
     }
 
