@@ -31,7 +31,7 @@ export function InputSection() {
             // Fetching data to server:
             if(currentNote.id > 0){
                 
-                console.log("Saving: ", {...currentNote, content: textContent});
+                console.log("Saved note: ", {...currentNote, content: textContent});
                 fetch(UPDATE_NOTE.address, createJSONRequestObject(UPDATE_NOTE.method, {...currentNote, content: textContent}))
                     .catch(err => console.log(err));
             }
@@ -43,7 +43,7 @@ export function InputSection() {
             // Fetching data to server:
             if(currentNote.id > 0){
 
-                console.log("Deleting: ", currentNote);
+                console.log("Deleted note: ", currentNote);
                 fetch(REMOVE_NOTE.address, createJSONRequestObject(REMOVE_NOTE.method, {id: currentNote.id}))
                     .then(response => response.json())
                         // Recreating note list:
