@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,mBAAmB,CAAC;EAChB,MAAM,EAAE,IAAI;EACZ,KAAK,EAAE,IAAI;EACX,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EAEtB,SAAS,EAAE,mBAAmB;EAC9B,WAAW,EAAE,EAAE;EAEf,YAAY,EAAE,eAAe;CAAG;;AAEpC,AAAA,gCAAgC,CAAC;EAC7B,UAAU,EAAE,KAAK;CAAG",
+    "sources": [
+        "../sass/line-number-column.sass"
+    ],
+    "names": [],
+    "file": "line-number-column.css"
+}

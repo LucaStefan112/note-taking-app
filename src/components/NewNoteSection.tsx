@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { switchisCreatingNote, setNotesList, setCurrentNote } from '../redux/actions'
-import { createJSONRequestObject, hasAlphanum } from '../utils'
+import { switchisCreatingNote, setNotesList, setCurrentNote, setNumberOfLines } from '../redux/actions'
+import { countLinesOf, createJSONRequestObject, hasAlphanum } from '../utils'
 import { NEW_NOTE } from '../requests'
 import '../style/css/new-note-box.css'
 
@@ -39,10 +39,13 @@ export default function NewNoteSection() {
             const data = await response.json();
 
             // Updating notes list:
-            dispatch(setNotesList(data));
+            dispatch(setNotesList([...notesList, data[data.length - 1]]));
 
             // Make new note current note:
             dispatch(setCurrentNote(data[data.length - 1]));
+            
+            // Update line number:
+            dispatch(setNumberOfLines(countLinesOf(data[data.length - 1].content)))
         } catch (err) {
             console.log(err);
         }

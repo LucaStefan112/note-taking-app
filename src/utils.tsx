@@ -20,3 +20,11 @@ export interface noteInterface{
     name: string,
     content: string
 }
+
+// Counter of new-line character in a string:
+export function countLinesOf(str: string){
+    let cnt = 0;
+    for(let i = 0; i < str.length; i++) 
+        if(str[i] == '\n') cnt++;
+    return cnt;
+}

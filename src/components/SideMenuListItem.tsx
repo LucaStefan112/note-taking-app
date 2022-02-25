@@ -1,6 +1,6 @@
-import { noteInterface } from '../utils'
+import { countLinesOf, noteInterface } from '../utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentNote, setNotesList } from '../redux/actions';
+import { setCurrentNote, setNotesList, setNumberOfLines } from '../redux/actions';
 import { textContent } from './InputSection';
 
 export default function SideMenuListItem({thisNote}: {thisNote: noteInterface}) {
@@ -10,6 +10,8 @@ export default function SideMenuListItem({thisNote}: {thisNote: noteInterface}) 
 
     // Selecting this note:
     function selectNote(){
+        if(thisNote.name === currentNote.name)  return;
+
         console.log("Selected note: ", thisNote);
 
         // Saving previous note content in array:
@@ -18,11 +20,14 @@ export default function SideMenuListItem({thisNote}: {thisNote: noteInterface}) 
         
         // Settin the new current note:
         dispatch(setCurrentNote(thisNote));
+
+        //Updating number of lines:
+        dispatch(setNumberOfLines(countLinesOf(thisNote.content)));
     }
 
     return (
         <div className='side-menu__list-item' onClick={selectNote}>
-            <h2>{thisNote.name}</h2>
+            <h3>{thisNote.name}</h3>
         </div>
     )
 }

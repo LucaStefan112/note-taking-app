@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createJSONRequestObject, defaultNote } from '../utils'
-import { setCurrentNote, setNotesList } from '../redux/actions'
+import { countLinesOf, createJSONRequestObject, defaultNote } from '../utils'
+import { setCurrentNote, setNotesList, setNumberOfLines } from '../redux/actions'
 import { UPDATE_NOTE, REMOVE_NOTE } from '../requests'
 import '../style/css/input-section.css'
+import { fireEvent } from '@testing-library/react'
 
 // Text area input:
 export let textContent = '';
@@ -19,6 +20,7 @@ export function InputSection() {
     // Changing text area content:
     const handleInputChange = (e: any) => {
         textContent = e.target.value;
+        dispatch(setNumberOfLines(countLinesOf(textContent)));
     }
 
     // Handle keys:
@@ -30,8 +32,8 @@ export function InputSection() {
 
             // Fetching data to server:
             if(currentNote.id > 0){
-                
-                console.log("Saved note: ", {...currentNote, content: textContent});
+                console.log(JSON.stringify(textContent))
+                console.log("Saved note: ", {...currentNote, content: JSON.stringify(textContent)});
                 fetch(UPDATE_NOTE.address, createJSONRequestObject(UPDATE_NOTE.method, {...currentNote, content: textContent}))
                     .catch(err => console.log(err));
             }
@@ -51,8 +53,11 @@ export function InputSection() {
                             dispatch(setNotesList(data));
                             
                             // Making last note current note:
-                            if(data.length > 0) dispatch(setCurrentNote(data[data.length - 1]))
-                            else    dispatch(setCurrentNote(defaultNote));
+                            const lastNote = data.length > 0 ? {...data[data.length - 1]} : defaultNote;
+                            dispatch(setCurrentNote(lastNote))
+
+                            // Update number of lines;
+                            dispatch(setNumberOfLines(countLinesOf(lastNote.content)))
                         })
                             .catch(err => console.log(err));
             }

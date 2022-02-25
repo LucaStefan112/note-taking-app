@@ -27,3 +27,10 @@ export const updateCurrentNote = (payload: noteInterface) => (
         payload
     }
 )
+
+export const setNumberOfLines = (payload: number) => (
+    {
+        type: ACTION_TYPES.setNumberOfLines_actionType,
+        payload
+    }
+)
