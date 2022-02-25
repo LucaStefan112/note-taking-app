@@ -61,7 +61,7 @@ export function InputSection() {
     return (
         <div className='main-input' >
             {   currentNote.id > 0 && 
-                <textarea key={Math.random()} autoFocus className='main-input__box' 
+                <textarea key={Math.random()} autoFocus className='main-input__box' wrap='off'
                 defaultValue={textContent} name="text-input" onChange={handleInputChange}/>}
         </div>
     )

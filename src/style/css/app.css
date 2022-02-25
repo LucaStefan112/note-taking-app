@@ -63,7 +63,7 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 10%;
+  width: 200px;
   height: 100%;
   border-right: 1px solid black;
 }
