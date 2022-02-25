@@ -46,10 +46,13 @@ export function InputSection() {
                 console.log("Deleted note: ", currentNote);
                 fetch(REMOVE_NOTE.address, createJSONRequestObject(REMOVE_NOTE.method, {id: currentNote.id}))
                     .then(response => response.json())
-                        // Recreating note list:
                         .then(data => {
-                            dispatch(setNotesList(data)); 
-                            dispatch(setCurrentNote({...defaultNote}))
+                            // Updating note list:
+                            dispatch(setNotesList(data));
+                            
+                            // Making last note current note:
+                            if(data.length > 0) dispatch(setCurrentNote(data[data.length - 1]))
+                            else    dispatch(setCurrentNote(defaultNote));
                         })
                             .catch(err => console.log(err));
             }

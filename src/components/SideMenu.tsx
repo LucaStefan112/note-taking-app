@@ -3,7 +3,7 @@ import SideMenuListItem from './SideMenuListItem';
 import { useSelector, useDispatch } from 'react-redux'
 import { setCurrentNote, setNotesList, switchisCreatingNote } from '../redux/actions'
 import { NOTES } from '../requests';
-import { noteInterface } from '../utils';
+import { defaultNote, noteInterface } from '../utils';
 import '../style/css/side-menu.css'
 
 export default function SideMenu() {
@@ -21,6 +21,7 @@ export default function SideMenu() {
 
                     // Make current note last note:
                     if(data.length > 0) dispatch(setCurrentNote(data[data.length - 1]));
+                    else dispatch(setCurrentNote(defaultNote))
                 })
                     .catch(err => console.log(err));
     }
