@@ -34,3 +34,5 @@ export const setNumberOfLines = (payload: number) => (
         payload
     }
 )
+
+export const setFontClass

@@ -4,6 +4,7 @@ import '../style/css/line-number-column.css'
 export default function LineNumberColumn() {
     const numberOfLines = useSelector((state: any) => state.numberOfLines)
     
+    // Creating an array of <p>'s: 
     const lines = () => {
         const arr = [];
 
@@ -15,9 +16,7 @@ export default function LineNumberColumn() {
 
     return (
     <div className='line-number-column'>
-        {
-            lines()
-        }
+        { lines() }
     </div>
     )
 }

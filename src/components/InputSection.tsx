@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { countLinesOf, createJSONRequestObject, defaultNote } from '../utils'
+import { countLinesOf, createJSONRequestObject, defaultNote, noteInterface } from '../utils'
 import { setCurrentNote, setNotesList, setNumberOfLines } from '../redux/actions'
 import { UPDATE_NOTE, REMOVE_NOTE } from '../requests'
 import '../style/css/input-section.css'
-import { fireEvent } from '@testing-library/react'
 
 // Text area input:
 export let textContent = '';
@@ -14,7 +13,7 @@ export function InputSection() {
     const currentNote = useSelector((state: any) => state.currentNote);
     const notesList = useSelector((state: any) => state.notesList);
 
-    // By default, text area input is equal to current note saved content:
+    // By default, text area input is equal to current's note saved content:
     textContent = currentNote.content;
 
     // Changing text area content:
@@ -32,8 +31,8 @@ export function InputSection() {
 
             // Fetching data to server:
             if(currentNote.id > 0){
-                console.log(JSON.stringify(textContent))
-                console.log("Saved note: ", {...currentNote, content: JSON.stringify(textContent)});
+
+                console.log("Saving note: ", {...currentNote, content: JSON.stringify(textContent)});
                 fetch(UPDATE_NOTE.address, createJSONRequestObject(UPDATE_NOTE.method, {...currentNote, content: textContent}))
                     .catch(err => console.log(err));
             }
@@ -45,21 +44,24 @@ export function InputSection() {
             // Fetching data to server:
             if(currentNote.id > 0){
 
-                console.log("Deleted note: ", currentNote);
+                console.log("Deleting note: ", currentNote);
                 fetch(REMOVE_NOTE.address, createJSONRequestObject(REMOVE_NOTE.method, {id: currentNote.id}))
-                    .then(response => response.json())
-                        .then(data => {
-                            // Updating note list:
-                            dispatch(setNotesList(data));
-                            
-                            // Making last note current note:
-                            const lastNote = data.length > 0 ? {...data[data.length - 1]} : defaultNote;
-                            dispatch(setCurrentNote(lastNote))
+                    .then(() => {
+                        
+                        //Removing current note:
+                        const newArr = notesList.filter((note: noteInterface) => note.id !== currentNote.id);
 
-                            // Update number of lines;
-                            dispatch(setNumberOfLines(countLinesOf(lastNote.content)))
-                        })
-                            .catch(err => console.log(err));
+                        // Updating notes list:
+                        dispatch(setNotesList(newArr));
+
+                        // Making last note current note:
+                        const lastNote = newArr.length > 0 ? {...newArr[newArr.length - 1]} : defaultNote;
+                        dispatch(setCurrentNote(lastNote));
+
+                        // Update number of lines:
+                        dispatch(setNumberOfLines(countLinesOf(lastNote.content)))
+                    })
+                        .catch(err => console.log(err));
             }
         }
     }
@@ -72,9 +74,11 @@ export function InputSection() {
 
     return (
         <div className='main-input' >
-            {   currentNote.id > 0 && 
+            {   
+                currentNote.id > 0 && 
                 <textarea key={Math.random()} autoFocus className='main-input__box' wrap='off'
-                defaultValue={textContent} name="text-input" onChange={handleInputChange}/>}
+                defaultValue={textContent} name="text-input" onChange={handleInputChange}/>
+            }
         </div>
     )
 }

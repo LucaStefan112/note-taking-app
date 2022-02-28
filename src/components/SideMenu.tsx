@@ -11,8 +11,9 @@ export default function SideMenu() {
     const dispatch = useDispatch();
     const notesList = useSelector((state: any) => state.notesList);
     const currentNote = useSelector((state: any) => state.currentNote);
+
     // Getting all notes from db:
-    const loadNotesList = async () => {
+    const loadNotesList = () => {
         // Fetching data from server:
         fetch(NOTES.address)
             .then(response => response.json())
@@ -30,12 +31,16 @@ export default function SideMenu() {
                     .catch(err => console.log(err));
     }
 
-    const handleNewNoteBtn = () => {
-        
+    const addNoteButtonHandler = () => {
 
-        // Saving previous note content in array:
-        const newNotesList = notesList.map((note: noteInterface) => note.id === currentNote.id ? {...note, content: textContent} : note);
-        dispatch(setNotesList(newNotesList));
+        // Updating current note content:
+        dispatch(setCurrentNote({...currentNote, content: textContent}));
+
+        // Saving current note:
+        const updatedArr = notesList.map((note: noteInterface) => note.id === currentNote.id ? {...note, content: textContent} : note);
+        dispatch(setNotesList(updatedArr));
+
+        // Switch to creating note menu:
         dispatch(switchisCreatingNote());
     }
 
@@ -48,7 +53,7 @@ export default function SideMenu() {
             {   // Render notes list:
                 notesList.map((note: noteInterface) => <SideMenuListItem key={note.id} thisNote={note} />)
             }
-            <button className='side-menu_add-note-button' onClick={() => dispatch(switchisCreatingNote())} >New note</button>
+            <button className='side-menu_add-note-button' onClick={addNoteButtonHandler} >New note</button>
         </div>
     )
 }

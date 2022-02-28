@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { switchisCreatingNote, setNotesList, setCurrentNote, setNumberOfLines } from '../redux/actions'
-import { countLinesOf, createJSONRequestObject, hasAlphanum } from '../utils'
+import { countLinesOf, createJSONRequestObject, isNameForNoteValid } from '../utils'
 import { NEW_NOTE } from '../requests'
 import '../style/css/new-note-box.css'
 
@@ -14,20 +14,15 @@ export default function NewNoteSection() {
 
     // Exiting new note section: 
     const cancelNewNote = () => dispatch(switchisCreatingNote());
-    
+
     // Creating a new note:
-    const createNewNote = async () => {
+    const createNewNote = () => {
 
-        // Checking validity for current name:
-        let nameValidity = 0 < newNoteName.length && newNoteName.length < 31 && hasAlphanum(newNoteName);
+        //Checking name's validity:
+        if(!isNameForNoteValid(newNoteName, notesList)){
 
-        // Check if name already exists:
-        for(let i = 0; i < notesList.length && nameValidity; i++)
-            nameValidity = newNoteName !== notesList[i].name;
-
-        if(!nameValidity){
             // Displaying error message: 
-            setIsNoteNameStringValid(false)
+            setIsNoteNameStringValid(false);
             return;
         }
 
@@ -35,17 +30,18 @@ export default function NewNoteSection() {
 
         try{
             // Fetching data to server:
-            const response = await fetch(NEW_NOTE.address, createJSONRequestObject(NEW_NOTE.method, {name: newNoteName}));
-            const data = await response.json();
+            fetch(NEW_NOTE.address, createJSONRequestObject(NEW_NOTE.method, {name: newNoteName}))
+                .then(response => response.json())
+                    .then(data => {
+                        // Updating notes list:
+                        dispatch(setNotesList([...notesList, data]));
 
-            // Updating notes list:
-            dispatch(setNotesList([...notesList, data[data.length - 1]]));
-
-            // Make new note current note:
-            dispatch(setCurrentNote(data[data.length - 1]));
-            
-            // Update line number:
-            dispatch(setNumberOfLines(countLinesOf(data[data.length - 1].content)))
+                        // Make new note current note:
+                        dispatch(setCurrentNote(data));
+                        
+                        // Update line number:
+                        dispatch(setNumberOfLines(countLinesOf(data.content)))
+                    })
         } catch (err) {
             console.log(err);
         }
