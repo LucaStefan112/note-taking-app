@@ -9,3 +9,5 @@ export const updateCurrentNote_actionType = 'UPDATE CURRENT NOTE';
 export const setNumberOfLines_actionType = 'SET NUMBER OF LINES';
 
 export const setFontClass_actionType = 'SET FONT CLASS';
+
+export const switchSettings_actionType = 'SWITCH SETTINGS';

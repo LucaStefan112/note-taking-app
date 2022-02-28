@@ -1,5 +1,4 @@
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { switchisCreatingNote, setNotesList, setCurrentNote, setNumberOfLines } from '../redux/actions'
 import { countLinesOf, createJSONRequestObject, isNameForNoteValid } from '../utils'

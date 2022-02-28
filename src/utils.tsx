@@ -40,3 +40,10 @@ export function isNameForNoteValid(name: string, notesList: noteInterface[]) : b
     
         return nameValidity;
 }
+
+export const FONTS = {
+    roboto: "font--roboto",
+    anonymous_pro: "font--anonymous-pro",
+    sans_worl: "font--sans-work",
+    valera_round: "font--valera-round"
+}

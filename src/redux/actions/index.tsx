@@ -35,4 +35,15 @@ export const setNumberOfLines = (payload: number) => (
     }
 )
 
-export const setFontClass
+export const setFontClass = (payload: string) => (
+    {
+        type: ACTION_TYPES.setFontClass_actionType,
+        payload
+    }
+)
+
+export const switchSettings = () => (
+    {
+        type: ACTION_TYPES.switchSettings_actionType
+    }
+)
